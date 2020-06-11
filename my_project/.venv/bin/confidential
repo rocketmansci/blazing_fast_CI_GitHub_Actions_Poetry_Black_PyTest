@@ -1,0 +1,8 @@
+#!/media/sda4_150GB_HDD/Archive/GitHub/blazing_fast_CI_GitHub_Actions_Poetry_Black_PyTest/my_project/.venv/bin/python
+# -*- coding: utf-8 -*-
+import re
+import sys
+from confidential.secrets_manager import decrypt_secret
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+    sys.exit(decrypt_secret())
