@@ -20,13 +20,27 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'r^oh2(oiz(q(=53!)kdv3b--#g-h0jb29z2sg*f+-&bdlzri5$'
+# SECRET_KEY = 'r^oh2(oiz(q(=53!)kdv3b--#g-h0jb29z2sg*f+-&bdlzri5$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
 
+from confidential import SecretsManager
+
+confidential = SecretsManager(
+    secrets_file_default=".confidential/defaults.json",
+    secrets_file=os.environ.get("SECRETS_FILE"),
+    region_name="us-east-1"
+)
+
+SECRET_KEY = confidential["SECRET_KEY"]
+DEBUG = confidential["DEBUG"]
+ALLOWED_HOSTS = confidential["ALLOWED_HOSTS"]
+DATABASES = {
+    'default': confidential["DATABASE"]
+}
 
 # Application definition
 
@@ -73,12 +87,12 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#    }
+# }
 
 
 # Password validation
